@@ -1,0 +1,116 @@
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: message-system-app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./src:/var/www
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=message_system
+      - DB_USERNAME=laravel
+      - DB_PASSWORD=secret
+      - CACHE_STORE=redis
+      - QUEUE_CONNECTION=database
+      - REDIS_CLIENT=predis
+      - REDIS_HOST=redis
+      - REDIS_PASSWORD=null
+      - REDIS_PORT=6379
+      - WEBHOOK_URL=${WEBHOOK_URL:-https://webhook.site/c3f13233-1ed4-429e-9649-8133b3b9c9cd}
+      - WEBHOOK_AUTH_KEY=${WEBHOOK_AUTH_KEY:-INS.me1x9uMcyYG1hKKQVPoc.bO3j9aZwRT0cA2Ywo}
+    networks:
+      - message-system
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    # IMPORTANT: We'll adjust this command after Laravel exists
+    command: sh -c "sleep 5 && php artisan serve --host=0.0.0.0 --port=8000"
+
+  queue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: message-system-queue
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./src:/var/www
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=message_system
+      - DB_USERNAME=laravel
+      - DB_PASSWORD=secret
+      - CACHE_STORE=redis
+      - QUEUE_CONNECTION=database
+      - REDIS_CLIENT=predis
+      - REDIS_HOST=redis
+      - REDIS_PASSWORD=null
+      - REDIS_PORT=6379
+      - WEBHOOK_URL=${WEBHOOK_URL:-https://webhook.site/c3f13233-1ed4-429e-9649-8133b3b9c9cd}
+      - WEBHOOK_AUTH_KEY=${WEBHOOK_AUTH_KEY:-INS.me1x9uMcyYG1hKKQVPoc.bO3j9aZwRT0cA2Ywo}
+    networks:
+      - message-system
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    command: sh -c "sleep 10 && php artisan queue:work --tries=3"
+
+  mysql:
+    image: mysql:8.0
+    container_name: message-system-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: message_system
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: root_secret
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - message-system
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:alpine
+    container_name: message-system-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - message-system
+
+networks:
+  message-system:
+    driver: bridge
+
+volumes:
+  mysql-data:
+    driver: local
+  redis-data:
+    driver: local
