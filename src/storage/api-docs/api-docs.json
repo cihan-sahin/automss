@@ -1,0 +1,88 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Message System API",
+        "description": "API for creating and sending scheduled messages",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000",
+            "description": "Local development server"
+        }
+    ],
+    "paths": {
+        "/api/messages": {
+            "get": {
+                "tags": [
+                    "Messages"
+                ],
+                "summary": "Get list of sent messages",
+                "description": "Returns a list of all sent messages with their details including message IDs",
+                "operationId": "getMessages",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "count": {
+                                            "type": "integer",
+                                            "example": 5
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "phone_number": {
+                                                        "type": "string",
+                                                        "example": "+905551111111"
+                                                    },
+                                                    "content": {
+                                                        "type": "string",
+                                                        "example": "Insider - Project"
+                                                    },
+                                                    "message_id": {
+                                                        "type": "string",
+                                                        "example": "67f2f8a8-ea58-4ed0-a6f9-ff217df4d849"
+                                                    },
+                                                    "sent_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2025-12-30T19:15:00+00:00"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2025-12-30T19:10:00+00:00"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Messages",
+            "description": "Messages"
+        }
+    ]
+}

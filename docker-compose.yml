@@ -26,7 +26,7 @@ services:
       - REDIS_HOST=redis
       - REDIS_PASSWORD=null
       - REDIS_PORT=6379
-      - WEBHOOK_URL=${WEBHOOK_URL:-https://webhook.site/c3f13233-1ed4-429e-9649-8133b3b9c9cd}
+      - WEBHOOK_URL=${WEBHOOK_URL:-https://webhook.site/9afef4d6-b069-48b6-8b29-4e53536d9573}
       - WEBHOOK_AUTH_KEY=${WEBHOOK_AUTH_KEY:-INS.me1x9uMcyYG1hKKQVPoc.bO3j9aZwRT0cA2Ywo}
     networks:
       - message-system
@@ -62,7 +62,7 @@ services:
       - REDIS_HOST=redis
       - REDIS_PASSWORD=null
       - REDIS_PORT=6379
-      - WEBHOOK_URL=${WEBHOOK_URL:-https://webhook.site/c3f13233-1ed4-429e-9649-8133b3b9c9cd}
+      - WEBHOOK_URL=${WEBHOOK_URL:-https://webhook.site/9afef4d6-b069-48b6-8b29-4e53536d9573}
       - WEBHOOK_AUTH_KEY=${WEBHOOK_AUTH_KEY:-INS.me1x9uMcyYG1hKKQVPoc.bO3j9aZwRT0cA2Ywo}
     networks:
       - message-system

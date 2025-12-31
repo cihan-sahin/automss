@@ -98,12 +98,11 @@ class MessageService
 
     private function cacheMessageData(string $messageId, Message $message): void
     {
-        $cacheKey = "message:{$messageId}";
+        $cacheKey = "message:{$message->id}";
         $cacheData = [
             'message_id' => $messageId,
+            'record_id' => $messageId,
             'sent_at' => $message->sent_at->toIso8601String(),
-            'phone_number' => $message->phone_number,
-            'content' => $message->content,
         ];
 
         Cache::put($cacheKey, $cacheData, now()->addDays(7));

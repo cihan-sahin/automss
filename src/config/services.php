@@ -34,5 +34,9 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'webhook' => [
+        'url' => env('WEBHOOK_URL'),
+        'auth_key' => env('WEBHOOK_AUTH_KEY'),
+    ],
 
 ];
